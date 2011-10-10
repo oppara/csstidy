@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 	predefined_templates["high"].push_back("<span class=\"comment\">"); // before comment
 	predefined_templates["high"].push_back("</span>"); //after comment
 	predefined_templates["high"].push_back("\n"); // after last line @-rule
-	
+
 	predefined_templates["highest"].push_back("<span class=\"at\">");
 	predefined_templates["highest"].push_back("</span><span class=\"format\">{</span>");
 	predefined_templates["highest"].push_back("<span class=\"selector\">");
@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
 	predefined_templates["highest"].push_back("<span class=\"comment\">"); // before comment
 	predefined_templates["highest"].push_back("</span>"); //after comment
 	predefined_templates["highest"].push_back(""); // after last line @-rule
-		
+
 	predefined_templates["low"].push_back("<span class=\"at\">");
 	predefined_templates["low"].push_back("</span> <span class=\"format\">{</span>\n");
 	predefined_templates["low"].push_back("<span class=\"selector\">");
@@ -72,7 +72,37 @@ int main(int argc, char *argv[])
 	predefined_templates["low"].push_back("<span class=\"comment\">"); // before comment
 	predefined_templates["low"].push_back("</span>\n"); //after comment
 	predefined_templates["low"].push_back("\n"); // after last line @-rule
-	
+
+	predefined_templates["sw4"].push_back("<span class=\"at\">");
+	predefined_templates["sw4"].push_back("</span> <span class=\"format\">{</span>\n");
+	predefined_templates["sw4"].push_back("<span class=\"selector\">");
+	predefined_templates["sw4"].push_back("</span> <span class=\"format\">{</span>\n");
+	predefined_templates["sw4"].push_back("    <span class=\"property\">");
+	predefined_templates["sw4"].push_back("</span> <span class=\"value\">");
+	predefined_templates["sw4"].push_back("</span><span class=\"format\">;</span>\n");
+	predefined_templates["sw4"].push_back("<span class=\"format\">}</span>");
+	predefined_templates["sw4"].push_back("\n\n");
+	predefined_templates["sw4"].push_back("\n<span class=\"format\">}</span>\n\n");
+	predefined_templates["sw4"].push_back("    ");
+	predefined_templates["sw4"].push_back("<span class=\"comment\">"); // before comment
+	predefined_templates["sw4"].push_back("</span>\n"); //after comment
+	predefined_templates["sw4"].push_back("\n"); // after last line @-rule
+
+	predefined_templates["sw2"].push_back("<span class=\"at\">");
+	predefined_templates["sw2"].push_back("</span> <span class=\"format\">{</span>\n");
+	predefined_templates["sw2"].push_back("<span class=\"selector\">");
+	predefined_templates["sw2"].push_back("</span> <span class=\"format\">{</span>\n");
+	predefined_templates["sw2"].push_back("  <span class=\"property\">");
+	predefined_templates["sw2"].push_back("</span> <span class=\"value\">");
+	predefined_templates["sw2"].push_back("</span><span class=\"format\">;</span>\n");
+	predefined_templates["sw2"].push_back("<span class=\"format\">}</span>");
+	predefined_templates["sw2"].push_back("\n\n");
+	predefined_templates["sw2"].push_back("\n<span class=\"format\">}</span>\n\n");
+	predefined_templates["sw2"].push_back("  ");
+	predefined_templates["sw2"].push_back("<span class=\"comment\">"); // before comment
+	predefined_templates["sw2"].push_back("</span>\n"); //after comment
+	predefined_templates["sw2"].push_back("\n"); // after last line @-rule
+
 	csstidy csst;
 
 	if(argc > 1)
@@ -83,9 +113,9 @@ int main(int argc, char *argv[])
 			cout << "The file \"" << filein << "\" does not exist." << endl;
 			return EXIT_FAILURE;
 		}
-		
+
 		string output_filename;
-		
+
 		for(int i = 2; i < argc; ++i)
 		{
 			bool output_file = true;
@@ -115,7 +145,8 @@ int main(int argc, char *argv[])
 			else if(trim(argv[i]).substr(0,11) == "--template=")
 			{
 				string template_value = trim(argv[i]).substr(11);
-				if(template_value == "high" || template_value == "highest" || template_value == "low")
+				if(template_value == "high" || template_value == "highest"
+                        || template_value == "sw2" || template_value == "sw4" || template_value == "low")
 				{
 					csst.csstemplate = predefined_templates[template_value];
 				}
@@ -135,7 +166,7 @@ int main(int argc, char *argv[])
 				output_filename = trim(argv[i]);
 			}
 		}
-		
+
 		string css_file;
         if(filein == "-") {
 			string temp;
@@ -148,7 +179,7 @@ int main(int argc, char *argv[])
         }
 
 		csst.parse_css(css_file);
-		
+
 		// Print CSS to screen if no output file is specified
 		if(output_filename == "")
 		{
@@ -158,7 +189,7 @@ int main(int argc, char *argv[])
 		{
 			csst.print_css(output_filename);
 		}
-		
+
 		return EXIT_SUCCESS;
 	}
 
@@ -169,7 +200,7 @@ int main(int argc, char *argv[])
 		   || j->first == "case_properties") {
 			continue;
 		}
-		
+
 		cout << " --" << j->first;
 		if(j->second == true)
 		{
@@ -183,8 +214,8 @@ int main(int argc, char *argv[])
 	cout << " --merge_selectors=[2|1|0] |\n";
 	cout << " --case_properties=[0|1|2] |\n";
 	cout << " --optimise_shorthands=[1|2|0] |\n";
-	cout << " --template=[default|filename|low|high|highest] |\n";
+	cout << " --template=[default|filename|low|high|highest|sw4|sw2] |\n";
 	cout << " output_filename ]*" << endl;
-	
+
 	return EXIT_SUCCESS;
 }
